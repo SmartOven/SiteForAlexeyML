@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql
+    container_name: Alexey_mysql_container
+    environment:
+      MYSQL_DATABASE: bot
+      MYSQL_ROOT_PASSWORD:
+    ports:
+      - "3306:3306"

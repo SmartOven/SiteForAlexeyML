@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>NSFW Detector</title>
+</head>
+<body>
+<div class="page-body">
+    <div class="page-header">
+        <div class="div-text">
+            NSFW Detector
+        </div>
+    </div>
+
+    <div class="page-body-block">
+        <div>
+            <label for="chatId">Введите ID вашего чата в Telegram</label>
+        </div>
+        <div>
+            <input type="text" name="chaId" id="chatId">
+        </div>
+    </div>
+    <div class="page-body-block">
+        <div>
+            Выберите, какие меры стоит предпринимать
+        </div>
+        <div class="punishment-table">
+            <div class="table-header">
+                <div class="table-content">
+                    Нарушение
+                </div>
+            </div>
+            <div class="table-header">
+                <div class="table-content">
+                    Удаление
+                </div>
+            </div>
+            <div class="table-header">
+                <div class="table-content">
+                    Мут
+                </div>
+            </div>
+            <div class="table-header">
+                <div class="table-content">
+                    Бан
+                </div>
+            </div>
+            <div class="table-row violation-column">
+                <div class="table-content">
+                    Угроза
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="delete" id="deleteOnThreat">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="mute" id="muteOnThreat">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="ban" id="banOnThreat">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content violation-column">
+                    Оскорбление
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="delete" id="deleteOnOffense">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="mute" id="muteOnOffense">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="ban" id="banOnOffense">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content violation-column">
+                    Непристойность
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="delete" id="deleteOnObscenity">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="mute" id="muteOnObscenity">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="ban" id="banOnObscenity">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content violation-column">
+                    Нарушение в принципе
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="delete" id="deleteOnOtherViolation">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="mute" id="muteOnOtherViolation">
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-content">
+                    <input type="checkbox" name="ban" id="banOnOtherViolation">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body-block">
+        <input type="submit" value="Сохранить" class="btn btn-primary submit-button" onclick="updateConfig()">
+    </div>
+
+</div>
+</body>
+<script>
+    function updateConfig() {
+        const chatId = document.getElementById('chatId').value;
+        if (isNaN(parseInt(chatId, 10))) {
+            alert("ID чата в Telegram должен быть целым числом!");
+            return;
+        }
+
+        let requestBody = {
+            'chatId': chatId,
+            'onThreat': [
+                document.querySelector('#deleteOnThreat').checked,
+                document.querySelector('#muteOnThreat').checked,
+                document.querySelector('#banOnThreat').checked
+            ],
+            'onOffense': [
+                document.querySelector('#deleteOnOffense').checked,
+                document.querySelector('#muteOnOffense').checked,
+                document.querySelector('#banOnOffense').checked
+            ],
+            'onObscenity': [
+                document.querySelector('#deleteOnObscenity').checked,
+                document.querySelector('#muteOnObscenity').checked,
+                document.querySelector('#banOnObscenity').checked
+            ],
+            'onOtherViolation': [
+                document.querySelector('#deleteOnOtherViolation').checked,
+                document.querySelector('#muteOnOtherViolation').checked,
+                document.querySelector('#banOnOtherViolation').checked
+            ]
+        };
+
+        const url = 'http://localhost:8080/api/bot/config';
+        fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            }
+        ).then(response => {
+            if (response.ok) {
+                alert('Сохранено!');
+            } else {
+                response.text().then(responseText => {
+                    const response = JSON.parse(responseText);
+                    alert('Произошла ошибка, вот ее текст: ' + response.status + " " +  response.error);
+                });
+            }
+        });
+    }
+</script>
+</html>
