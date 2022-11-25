@@ -5,6 +5,6 @@ services:
     container_name: Alexey_mysql_container
     environment:
       MYSQL_DATABASE: bot
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_ROOT_PASSWORD: example
     ports:
       - "3306:3306"

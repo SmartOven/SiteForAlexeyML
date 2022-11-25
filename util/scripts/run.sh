@@ -1,6 +1,6 @@
 #!/bin/bash
-chmod +x java_run.sh
+chmod +x stop.sh
 
-nohup ./java_run.sh > site.log 2> site.errors.log < /dev/null &
+nohup java -jar ../executable/site.jar > site.log 2> site.errors.log < /dev/null &
 PID=$!
 echo $PID > site.pid

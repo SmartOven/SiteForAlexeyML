@@ -37,3 +37,6 @@ out/
 .vscode/
 
 util/scripts/local
+util/scripts/*.log
+util/scripts/*.pid
+src/main/resources/application-dev.properties
